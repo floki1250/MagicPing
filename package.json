@@ -10,11 +10,13 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@nuxt/devtools": "latest",
-    "@nuxt/ui": "^2.13.0",
-    "nuxt": "^3.10.1"
+    "@nuxt/devtools": "^1.0.8",
+    "@nuxt/ui": "^2.14.1",
+    "nuxt": "^3.10.3"
   },
   "dependencies": {
+    "@iconify-json/solar": "^1.1.9",
+    "@nuxtjs/color-mode": "^3.3.2",
     "peer": "^1.0.2",
     "peerjs": "^1.5.2",
     "peerjs-server": "^0.2.9"
