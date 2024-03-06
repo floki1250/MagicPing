@@ -2,7 +2,6 @@
 export default defineNuxtConfig({
   devtools: {
     enabled: true,
-
     timeline: {
       enabled: true,
     },
@@ -10,6 +9,7 @@ export default defineNuxtConfig({
   ui: {
     icons: ["solar"],
   },
+
   ssr: false,
   modules: ["@nuxt/ui", "@nuxtjs/color-mode"],
 });
