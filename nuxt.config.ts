@@ -11,5 +11,5 @@ export default defineNuxtConfig({
   },
 
   ssr: false,
-  modules: ["@nuxt/ui", "@nuxtjs/color-mode"],
+  modules: ["@nuxt/ui", "@nuxtjs/color-mode", "@vueuse/nuxt"],
 });

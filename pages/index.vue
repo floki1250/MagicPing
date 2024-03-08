@@ -15,46 +15,51 @@
       <div class="w-full min-h-12 bg-[#f2cc8f] text-black p-4 flex justify-between">
         <div>
           <h1 class="font-bold text-2xl">RECEIVING</h1>
-          <p class="text-sm">Your device will shown as <b>X</b></p>
+          <p class="text-sm">
+            Your device will shown as <b>{{ characterName }}</b>
+          </p>
         </div>
         <div>
           <UToggle size="md" :model-value="true" />
         </div>
       </div>
-      <div class="divide-y divide-slate-200">
-        <Accordion />
+      <div>
+        <Peers :data="data" :loading="pending" />
+        <Cloud />
       </div>
     </main>
   </div>
 </template>
 
 <script setup>
+import Peer from "peerjs";
+import { uniqueNamesGenerator, starWars, adjectives } from "unique-names-generator";
+const characterName = uniqueNamesGenerator({
+  dictionaries: [adjectives, starWars],
+}).replace(/\s/g, "");
+const { data, pending, refresh } = await useFetch("http://localhost:9000/peerjs/peers", {
+  transform (data) {
+    return data.filter((el) => el !== characterName);
+  },
+});
+useIntervalFn(() => {
+  console.log("Refreshing...");
+  refresh();
+}, 10000);
 
+let myPeer = null;
 
+// Connect to the PeerJS Server using the configured URL
+const serverUrl = process.env.PEERJS_SERVER_URL || "localhost:9000";
+const options = {
+  host: serverUrl.split(":")[0],
+  port: serverUrl.split(":")[1],
+  path: "/",
+};
+myPeer = new Peer(characterName, options); // Connect to server
 const colorMode = useColorMode();
 
 function switchColorMode () {
   colorMode.value = colorMode.value === "dark" ? "light" : "dark";
 }
-
-const items = [
-  {
-    label: "Theming",
-    icon: "i-heroicons-eye-dropper",
-    slot: "theming",
-    color: "bg-bay-leaf-300",
-  },
-  {
-    label: "Getting Started",
-    icon: "i-heroicons-information-circle",
-    slot: "getting-started",
-    color: "bg-japonica-500",
-  },
-  {
-    label: "Installation",
-    icon: "i-heroicons-arrow-down-tray",
-    slot: "installation",
-    color: "bg-quarter-spanish-white-50",
-  },
-];
 </script>
