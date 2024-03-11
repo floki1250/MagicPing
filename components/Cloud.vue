@@ -23,8 +23,8 @@
             <div class="overflow-hidden">
                 <br />
                 <UButtonGroup size="md" orientation="horizontal" class="w-full">
-                    <UInput type="file" class="w-full" />
-                    <UButton icon="i-solar-upload-bold" color="white" variant="solid" />
+                    <UInput type="file" class="w-full" @change="handleFileChange" />
+                    <UButton icon="i-solar-upload-bold" color="white" variant="solid" @click="uploadFile" />
                 </UButtonGroup>
             </div>
         </div>
@@ -32,5 +32,30 @@
 </template>
 
 <script setup>
+const file = ref(null);
 const accordionOpen = ref(false);
+const handleFileChange = (event) => {
+    file.value = event.target.files[0];
+};
+
+const uploadFile = async () => {
+    try {
+        const binName = "MagicDropCloud_data";
+        const fileName = "index.html";
+        const formData = new FormData(file.value);
+        formData.append(fileName, file);
+        const response = await axios.post(
+            `https://filebin.net/${binName}/${fileName}`,
+            formData,
+            {
+                headers: {
+                    "Content-Type": "application/octet-stream",
+                },
+            }
+        );
+        console.log("File uploaded:", response.data.url);
+    } catch (error) {
+        console.error("Error uploading file:", error.message);
+    }
+};
 </script>

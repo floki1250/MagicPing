@@ -21,6 +21,8 @@
     "peer": "^1.0.2",
     "peerjs": "^1.5.2",
     "peerjs-server": "^0.2.9",
-    "unique-names-generator": "^4.7.1"
+    "simple-peer": "^9.11.1",
+    "unique-names-generator": "^4.7.1",
+    "vue-webrtc": "^3.0.1"
   }
 }

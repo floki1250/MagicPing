@@ -37,11 +37,15 @@ import { uniqueNamesGenerator, starWars, adjectives } from "unique-names-generat
 const characterName = uniqueNamesGenerator({
   dictionaries: [adjectives, starWars],
 }).replace(/\s/g, "");
-const { data, pending, refresh } = await useFetch("http://localhost:9000/peerjs/peers", {
-  transform (data) {
-    return data.filter((el) => el !== characterName);
-  },
-});
+
+const { data, pending, refresh } = await useFetch(
+  "http://192.168.137.1:9000/peerjs/peers",
+  {
+    transform (data) {
+      return data.filter((el) => el !== characterName);
+    },
+  }
+);
 useIntervalFn(() => {
   console.log("Refreshing...");
   refresh();
@@ -50,11 +54,12 @@ useIntervalFn(() => {
 let myPeer = null;
 
 // Connect to the PeerJS Server using the configured URL
-const serverUrl = process.env.PEERJS_SERVER_URL || "localhost:9000";
+const serverUrl = process.env.PEERJS_SERVER_URL || "192.168.137.1:9000";
 const options = {
   host: serverUrl.split(":")[0],
   port: serverUrl.split(":")[1],
   path: "/",
+  debug: 3,
 };
 myPeer = new Peer(characterName, options); // Connect to server
 const colorMode = useColorMode();
