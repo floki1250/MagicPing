@@ -25,7 +25,7 @@
       </div>
       <div>
         <Peers :data="data" :loading="pending" />
-        <Cloud />
+        <Cloud :characterName="characterName" />
       </div>
     </main>
   </div>
