@@ -63,7 +63,6 @@ const options = {
 };
 myPeer = new Peer(characterName, options); // Connect to server
 const colorMode = useColorMode();
-
 function switchColorMode () {
   colorMode.value = colorMode.value === "dark" ? "light" : "dark";
 }
