@@ -1,11 +1,11 @@
 <template>
-  <div class="p-4 bg-japonica-500 dark:bg-japonica-700">
+  <div class="p-4 dark:bg-black bg-white rounded-lg border-2 border-[#5FD6D0] shadow-lg">
     <h2>
       <button class="flex items-center justify-between w-full" @click.prevent="accordionOpen = !accordionOpen"
         :aria-expanded="accordionOpen" aria-controls="accordion-text-01">
         <div>
           <div class="flex flex-col">
-            <h1 class="font-bold text-2xl text-black">CLOUD TRANSFER</h1>
+            <h1 class="font-bold text-2xl">CLOUD TRANSFER</h1>
           </div>
         </div>
         <div>
