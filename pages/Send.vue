@@ -1,48 +1,71 @@
 <template>
   <div>
-    <h2>Simple Peer Messenger</h2>
-    <p v-if="messageReceived">{{ messageReceived }}</p>
+    <h2>
+      Sender
+      <p>{{ characterName }}</p>
+    </h2>
+    <UInput type="text" v-model="receiver" placeholder="Enter receiver" />
+    <UButton @click="scan">Scan Qr Code</UButton><b>{{ text }}</b>
+    <video ref="videoElement" class="w-full rounded-lg" v-show="qrscannerEl"></video>
 
-    <input v-model="messageToSend" />
-    <button @click="sendMessage">Send Message</button>
+    <hr />
+    <UInput type="text" v-model="messageToSend" placeholder="Enter message" />
+    <UButton @click="sendMessage">Send Message</UButton>
+    <UButton @click="connect">Connect</UButton>
+    <hr />
+    <p v-if="messageReceived">{{ messageReceived }}</p>
+    <Chat />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import SimplePeer from "simple-peer";
+import QrScanner from "qr-scanner";
+import { ref } from "vue";
+import Peer from "peerjs";
+import { uniqueNamesGenerator, starWars, adjectives } from "unique-names-generator";
+const videoElement = ref(null);
+const characterName = uniqueNamesGenerator({
+  dictionaries: [adjectives, starWars],
+}).replace(/\s/g, "");
+const text = ref("");
+let qrScanner;
+const qrscannerEl = ref(false);
+async function scan () {
+  qrscannerEl.value = true;
+  try {
+    qrScanner = new QrScanner(videoElement.value, (r) => (text.value = r.data), {
+      onDecodeError: (error) => console.error(error),
+      returnDetailedScanResult: true,
+      highlightScanRegion: true,
+      highlightCodeOutline: true,
+    });
 
-const messageReceived = ref(null);
+    await qrScanner.start();
+  } catch (error) {
+    console.log(error);
+    qrscannerEl.value = false;
+  }
+}
+const messageReceived = ref("");
 const messageToSend = ref("");
-let peer;
+const receiver = ref("");
+const myPeer = new Peer(characterName, {});
 
-onMounted(() => {
-  peer = new SimplePeer({ initiator: true, trickle: false });
-
-  peer.on("data", (data) => {
-    // Handle received data
-    if (typeof data === "string") {
+const connect = () => {
+  const conn = myPeer.connect(receiver.value);
+  conn.on("open", () => {
+    console.log("Connected to peer");
+    conn.on("data", (data) => {
       messageReceived.value = data;
-    } else {
-      // Handle other types of data if needed
-    }
+    });
   });
-});
+};
 
 const sendMessage = () => {
-  if (peer) {
-    peer.send(messageToSend.value);
-  } else {
-    // Create a new peer if it doesn't exist
-    peer = new SimplePeer({ trickle: false });
-    peer.on("data", (data) => {
-      // Handle received data
-      if (typeof data === "string") {
-        messageReceived.value = data;
-      } else {
-        // Handle other types of data if needed
-      }
-    });
-  }
+  const conn = myPeer.connect(receiver.value);
+  conn.on("open", () => {
+    conn.send(messageToSend.value);
+    messageToSend.value = ""; // Clear the input field after sending message
+  });
 };
 </script>

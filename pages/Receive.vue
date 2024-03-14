@@ -1,21 +1,31 @@
 <template>
     <div>
-        <h2>Receiver Component {{ peerid }}</h2>
-        <p v-if="fileReceived">{{ fileReceived.name }} received successfully!</p>
-        <b v-if="messageReceived">{{ messageReceived }}</b>
+        <h2>
+            Receiver
+            <p>{{ characterName }}</p>
+            <img :src="qrcode" alt="QR Code" v-if="qrcode" />
+        </h2>
+        <hr />
+        <p v-if="messageReceived">{{ messageReceived }}</p>
     </div>
 </template>
+
 <script setup>
+import { useQRCode } from "@vueuse/integrations/useQRCode";
+
 import { ref, onMounted } from "vue";
+import Peer from "peerjs";
+import { uniqueNamesGenerator, starWars, adjectives } from "unique-names-generator";
 
-const fileReceived = ref(null);
+const characterName = uniqueNamesGenerator({
+    dictionaries: [adjectives, starWars],
+}).replace(/\s/g, "");
+let qrcode = useQRCode(characterName);
 const messageReceived = ref("");
-
-const peer = useNuxtApp().$peer;
-const peerid = useNuxtApp().$peerid;
+const myPeer = new Peer(characterName, {});
 
 onMounted(() => {
-    peer.on("connection", (conn) => {
+    myPeer.on("connection", (conn) => {
         conn.on("data", (data) => {
             messageReceived.value = data;
         });
