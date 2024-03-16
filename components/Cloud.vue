@@ -1,17 +1,21 @@
 <template>
-  <div class="p-4 dark:bg-black bg-white rounded-lg border-2 border-[#5FD6D0] shadow-lg">
+  <div
+    class="p-4 dark:bg-black/60 bg-white/50 rounded-lg border border-gray-200 dark:border-downy-300 awesome-shadow dark:shadow-lg text-black/70 dark:text-white">
     <h2>
       <button class="flex items-center justify-between w-full" @click.prevent="accordionOpen = !accordionOpen"
         :aria-expanded="accordionOpen" aria-controls="accordion-text-01">
         <div>
-          <div class="flex flex-col">
-            <h1 class="font-bold text-2xl">CLOUD TRANSFER</h1>
+          <div class="flex">
+            <UIcon name="i-line-md-cloud-upload-loop" class="w-8 h-8 mr-2" />
+            <h1 class="font-bold text-2xl reem-kufi">
+              Cloud Transfer
+            </h1>
           </div>
         </div>
         <div>
           <UIcon :name="accordionOpen
-            ? 'i-solar-alt-arrow-down-line-duotone'
-            : 'i-solar-alt-arrow-right-line-duotone'
+          ? 'i-solar-alt-arrow-down-line-duotone'
+          : 'i-solar-alt-arrow-right-line-duotone'
           " class="w-5 h-5">
           </UIcon>
         </div>

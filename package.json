@@ -11,10 +11,12 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "^1.0.8",
-    "@nuxt/ui": "^2.14.1",
-    "nuxt": "^3.10.3"
+    "@nuxt/ui": "^2.14.2",
+    "nuxt": "^3.10.3",
+    "sass": "^1.72.0"
   },
   "dependencies": {
+    "@iconify-json/line-md": "^1.1.36",
     "@iconify-json/solar": "^1.1.9",
     "@nuxtjs/color-mode": "^3.3.2",
     "@vueuse/nuxt": "^10.9.0",
