@@ -1,21 +1,31 @@
 <template>
-  <div>
-    <h2>
+  <div
+    class="dark:bg-black/70  bg-white/50 border border-gray-200 dark:border-gray-500  h-full m-4 rounded-lg backdrop-blur-lg awesome-shadow dark:shadow-lg p-4">
+    <UBreadcrumb :links="[{
+      label: 'Home',
+      icon: 'i-heroicons-home',
+      to: '/'
+    }, {
+      label: 'Send',
+      icon: 'i-line-md-telegram'
+    }]" />
+    <br>
+    <h1 class="text-3xl text-bold reem-kufi dark:text-white  text-black/70">
       Sender
-      <p>{{ characterName }}</p>
-    </h2>
-    <UInput type="text" v-model="receiver" placeholder="Enter receiver" />
-    <UButton @click="scan">Scan Qr Code</UButton><b>{{ text }}</b>
-    <video ref="videoElement" class="w-full rounded-lg" v-show="qrscannerEl"></video>
+    </h1>
+    <p class="reem-kufi text-gray-500">I'm {{ characterName }}</p>
 
-    <hr />
-    <UInput type="text" v-model="messageToSend" placeholder="Enter message" />
-    <UButton @click="sendMessage">Send Message</UButton>
-    <UButton @click="connect">Connect</UButton>
-    <hr />
-    <p v-if="messageReceived">{{ messageReceived }}</p>
-    <Chat />
+    <UDivider class="my-4" />
+    <div class="flex justify-between">
+      <UButtonGroup size="sm" orientation="horizontal">
+        <UInput color="primary" variant="outline" type="text" v-model="receiver" placeholder="Enter receiver" />
+        <UButton icon="i-solar-qr-code-bold-duotone" color="primary" variant="solid" @click="scan" />
+      </UButtonGroup>
+      <UButton @click="connect" variant="solid" icon="i-solar-link-line-duotone">Connect</UButton>
+    </div>
+    <video ref="videoElement" class="w-full rounded-lg" v-show="qrscannerEl"></video>
   </div>
+  <Chat />
 </template>
 
 <script setup>
@@ -23,6 +33,7 @@ import QrScanner from "qr-scanner";
 import { ref } from "vue";
 import Peer from "peerjs";
 import { uniqueNamesGenerator, starWars, adjectives } from "unique-names-generator";
+
 const videoElement = ref(null);
 const characterName = uniqueNamesGenerator({
   dictionaries: [adjectives, starWars],

@@ -6,7 +6,7 @@
         :aria-expanded="accordionOpen" aria-controls="accordion-text-01">
         <div>
           <div class="flex">
-            <UIcon name="i-line-md-cloud-upload-loop" class="w-8 h-8 mr-2" />
+            <UIcon name="i-line-md-cloud-outline-loop" class="w-8 h-8 mr-2" />
             <h1 class="font-bold text-2xl reem-kufi">
               Cloud Transfer
             </h1>
@@ -28,7 +28,7 @@
         <br />
         <UButtonGroup size="md" orientation="horizontal" class="w-full">
           <UInput type="file" class="w-full" @change="handleFileChange" />
-          <UButton icon="i-solar-upload-bold" color="white" variant="solid" @click="uploadFile" :loading="loading" />
+          <UButton icon="i-solar-upload-bold" color="primary" variant="solid" @click="uploadFile" :loading="loading" />
         </UButtonGroup>
         <br />
         <div class="pt-4">
