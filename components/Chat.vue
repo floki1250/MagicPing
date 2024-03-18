@@ -1,7 +1,7 @@
 <template>
   <div
     class="dark:bg-black/70  bg-white/50 border border-gray-200 dark:border-gray-500  h-full m-4 rounded-lg backdrop-blur-lg awesome-shadow dark:shadow-lg p-4">
-    <div class="flex flex-col h-full min-h-60 overflow-y auto p-4">
+    <div class="flex flex-col h-full min-h-40 overflow-y auto p-4">
       <div v-for="message in messages" :key="message.id">
         <div v-if="message.sender === 'me'" class="flex justify-end">
           <div class="bg-teal-500 text-white px-4 py-2 rounded-lg">
