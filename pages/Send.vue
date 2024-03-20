@@ -1,19 +1,22 @@
 <template>
-  <div class="overflow-y">
+  <div>
     <div
-      class="dark:bg-black/70  bg-white/50 border border-gray-200 dark:border-gray-500  h-full m-4 rounded-lg backdrop-blur-lg awesome-shadow dark:shadow-lg p-4">
-      <UBreadcrumb :links="[{
-        label: 'Home',
-        icon: 'i-heroicons-home',
-        to: '/'
-      }, {
-        label: 'Send',
-        icon: 'i-line-md-telegram'
-      }]" />
-      <br>
-      <h1 class="text-3xl text-bold reem-kufi dark:text-white  text-black/70">
-        Sender
-      </h1>
+      class="dark:bg-black/70 bg-white/50 border border-gray-200 dark:border-gray-500 h-full m-4 rounded-lg backdrop-blur-lg awesome-shadow dark:shadow-lg p-4">
+      <UBreadcrumb :links="[
+        {
+          label: 'Home',
+          icon: 'i-heroicons-home',
+          to: '/',
+        },
+        {
+          label: 'Send',
+          icon: 'i-line-md-telegram',
+        },
+      ]" />
+      <br />
+
+      <h1 class="text-3xl text-bold reem-kufi dark:text-white text-black/70">Sender</h1>
+
       <p class="reem-kufi text-gray-500">I'm {{ characterName }}</p>
 
       <UDivider class="my-4" />
@@ -24,11 +27,10 @@
         </UButtonGroup>
         <UButton @click="connect" variant="solid" icon="i-solar-link-line-duotone" :loading="loading">Connect</UButton>
       </div>
-
     </div>
     <div
-      class="dark:bg-black/70  bg-white/50 border border-gray-200 dark:border-gray-500  h-full m-4 rounded-lg backdrop-blur-lg awesome-shadow dark:shadow-lg p-4">
-      <div ref="chatContainer" class="flex flex-col h-40  overflow-y-scroll  p-4">
+      class="dark:bg-black/70 bg-white/50 border border-gray-200 dark:border-gray-500 h-full m-4 rounded-lg backdrop-blur-lg awesome-shadow dark:shadow-lg p-4">
+      <div ref="chatContainer" class="flex flex-col h-40 overflow-y-scroll p-4">
         <div v-for="message in messages" :key="message.id" class="m-1">
           <div v-if="message.sender === 'me'" class="flex justify-end">
             <div class="bg-teal-400 text-white px-4 py-2 rounded-full rounded-br-none">
@@ -42,8 +44,16 @@
           </div>
         </div>
       </div>
-      <div class="flex ">
-        <UButtonGroup size="md" orientation="horizontal" class="w-full">
+      <div class="flex flex-col">
+        <UButtonGroup size="sm" orientation="horizontal" class="w-full">
+          <UInput type="file" @change="handleFileChange" class="transition-all ease-in-out duration-500" />
+          <UButton @click="handleSendFile" icon="i-solar-paperclip-bold-duotone" color="primary" variant="solid">Send
+            File</UButton>
+        </UButtonGroup>
+        <UButtonGroup size="sm" orientation="horizontal" class="w-full">
+          <UButton icon="i-solar-paperclip-bold-duotone" color="primary" variant="solid"
+            @click="showInputFile = !showInputFile" />
+
           <UInput color="primary" variant="outline" type="text" v-model="messageToSend" class="flex-grow w-full"
             placeholder="Type a message..." />
           <UButton @click="sendMessage" icon="i-line-md-telegram" color="primary" variant="solid">
@@ -87,26 +97,56 @@ const receiver = ref("");
 const myPeer = new Peer(characterName, {});
 let qrScanner;
 const qrscannerEl = ref(false);
-const isOpen = ref(false)
-async function scan () {
+const isOpen = ref(false);
 
+const showInputFile = ref(false);
+const file = ref(null);
+
+const handleFileChange = (event) => {
+  file.value = event.target.files[0];
+  console.log(file.value);
+};
+
+const handleSendFile = async () => {
+  if (!file.value) {
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.readAsDataURL(file.value);
+  reader.onload = () => sendFile(reader.result);
+};
+async function scan () {
   qrscannerEl.value = true;
   try {
-    qrScanner = new QrScanner(videoElement.value, (r) => (receiver.value = r.data), {
-      onDecodeError: (error) => console.error(error),
-      returnDetailedScanResult: true,
-      highlightScanRegion: true,
-      highlightCodeOutline: true,
-    });
+    qrScanner = new QrScanner(
+      videoElement.value,
+      (r) => ((receiver.value = r.data), stopScan()),
+      {
+        onDecodeError: (error) => console.log(error),
+        returnDetailedScanResult: true,
+        highlightScanRegion: true,
+        highlightCodeOutline: true,
+      }
+    );
     await qrScanner.start();
   } catch (error) {
-    console.log(error);
+    toast.add({
+      id: "errors",
+      title: "Error",
+      description: "Error: " + error?.message,
+      icon: "i-heroicons-exclamation-circle",
+      timeout: 6000,
+      color: "rose",
+    });
     qrscannerEl.value = false;
   }
 }
 function stopScan () {
-  qrScanner.stop();
-  isOpen.value = false
+  if (qrScanner) {
+    qrScanner.stop();
+  }
+  isOpen.value = false;
 }
 
 const connect = () => {
@@ -133,13 +173,32 @@ const sendMessage = () => {
   const conn = myPeer.connect(receiver.value);
   conn.on("open", async () => {
     conn.send(messageToSend.value);
-    await messages.value.push({ id: Math.random(), sender: "me", content: messageToSend.value });
+
+    await messages.value.push({
+      id: Math.random(),
+      sender: "me",
+      content: messageToSend.value,
+    });
     messageToSend.value = "";
-    scrollToBottom()
+    scrollToBottom();
+  });
+};
+const sendFile = (data) => {
+  console.log("Sending file", data);
+  const conn = myPeer.connect(receiver.value);
+  conn.on("open", async () => {
+    conn.send(data);
+
+    await messages.value.push({
+      id: Math.random(),
+      sender: "me",
+      content: `📎 ${file.value.name} 📎`,
+    });
+
+    scrollToBottom();
   });
 };
 function scrollToBottom () {
-  console.log(chatContainer.value.scrollHeight);
   chatContainer.value.scroll(0, chatContainer.value.scrollHeight + 50);
 }
 onMounted(() => {
