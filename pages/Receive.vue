@@ -12,7 +12,7 @@
 
 <script setup>
 import { useQRCode } from "@vueuse/integrations/useQRCode";
-
+import { download } from "downloadjs";
 import { ref, onMounted } from "vue";
 import Peer from "peerjs";
 import { uniqueNamesGenerator, starWars, adjectives } from "unique-names-generator";
@@ -23,11 +23,35 @@ const characterName = uniqueNamesGenerator({
 let qrcode = useQRCode(characterName);
 const messageReceived = ref("");
 const myPeer = new Peer(characterName, {});
-
+const receivedFile = ref(null);
+const receivedChunks = ref([]);
 onMounted(() => {
     myPeer.on("connection", (conn) => {
         conn.on("data", (data) => {
             messageReceived.value = data;
+            console.log(typeof data);
+            if (typeof data === "object") {
+                // Check for metadata
+                receivedFile.value = data;
+            } else {
+                receivedChunks.value.push(data);
+            }
+
+            if (
+                receivedChunks.value.length === Math.ceil(receivedFile.value.size / (1024 * 1024))
+            ) {
+                // Download completed, trigger download logic
+                const blob = new Blob(receivedChunks.value, {
+                    type: receivedFile.value.type,
+                });
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = receivedFile.value.name;
+                link.click();
+
+                window.URL.revokeObjectURL(url);
+            }
         });
     });
 });
