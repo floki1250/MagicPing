@@ -1,18 +1,21 @@
 <template>
   <div>
     <div
-      class="dark:bg-black/70 bg-white/50 border border-gray-200 dark:border-gray-500 h-full m-4 rounded-lg backdrop-blur-lg awesome-shadow dark:shadow-lg p-4">
-      <UBreadcrumb :links="[
-        {
-          label: 'Home',
-          icon: 'i-heroicons-home',
-          to: '/',
-        },
-        {
-          label: 'Send',
-          icon: 'i-line-md-telegram',
-        },
-      ]" />
+      class="dark:bg-black/70 bg-white/50 border border-gray-200 dark:border-gray-500 h-full m-4 rounded-lg backdrop-blur-lg awesome-shadow dark:shadow-lg p-4"
+    >
+      <UBreadcrumb
+        :links="[
+          {
+            label: 'Home',
+            icon: 'i-heroicons-home',
+            to: '/',
+          },
+          {
+            label: 'Send',
+            icon: 'i-line-md-telegram',
+          },
+        ]"
+      />
       <br />
 
       <h1 class="text-3xl text-bold reem-kufi dark:text-white text-black/70">Sender</h1>
@@ -22,14 +25,32 @@
       <UDivider class="my-4" />
       <div class="flex justify-between">
         <UButtonGroup size="sm" orientation="horizontal" class="pr-2">
-          <UInput color="primary" variant="outline" type="text" v-model="receiver" placeholder="Enter receiver" />
-          <UButton icon="i-solar-qr-code-bold-duotone" color="primary" variant="solid" @click="isOpen = true" />
+          <UInput
+            color="primary"
+            variant="outline"
+            type="text"
+            v-model="receiver"
+            placeholder="Enter receiver"
+          />
+          <UButton
+            icon="i-solar-qr-code-bold-duotone"
+            color="primary"
+            variant="solid"
+            @click="isOpen = true"
+          />
         </UButtonGroup>
-        <UButton @click="connect" variant="solid" icon="i-solar-link-line-duotone" :loading="loading">Connect</UButton>
+        <UButton
+          @click="connect"
+          variant="solid"
+          icon="i-solar-link-line-duotone"
+          :loading="loading"
+          >Connect</UButton
+        >
       </div>
     </div>
     <div
-      class="dark:bg-black/70 bg-white/50 border border-gray-200 dark:border-gray-500 h-full m-4 rounded-lg backdrop-blur-lg awesome-shadow dark:shadow-lg p-4">
+      class="dark:bg-black/70 bg-white/50 border border-gray-200 dark:border-gray-500 h-full m-4 rounded-lg backdrop-blur-lg awesome-shadow dark:shadow-lg p-4"
+    >
       <div ref="chatContainer" class="flex flex-col h-40 overflow-y-scroll p-4">
         <div v-for="message in messages" :key="message.id" class="m-1">
           <div v-if="message.sender === 'me'" class="flex justify-end">
@@ -44,34 +65,102 @@
           </div>
         </div>
       </div>
-      <div class="flex flex-col">
+      <div class="flex">
+        <UModal v-model="showFileTransfer">
+          <UCard
+            :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }"
+          >
+            <template #header>
+              <div class="flex items-center justify-between">
+                <h3
+                  class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
+                >
+                  File Transfer
+                </h3>
+              </div>
+            </template>
+            <div class="flex justify-center flex-col">
+              <div class="p-2">
+                <UInput
+                  type="file"
+                  @change="handleFileChange"
+                  class="transition-all ease-in-out duration-500"
+                />
+              </div>
+              <div>
+                <UButtonGroup size="sm" orientation="horizontal" class="w-full p-2">
+                  <UButton
+                    @click="handleSendFile"
+                    icon="i-solar-paperclip-bold-duotone"
+                    color="primary"
+                    variant="solid"
+                    :loading="sendingFile"
+                    >Send File via P2P</UButton
+                  >
+                  <UButton
+                    @click="handleSendFile"
+                    icon="i-solar-cloud-bold-duotone"
+                    color="violet"
+                    variant="solid"
+                    :loading="sendingFile"
+                    >Send File Via Cloud</UButton
+                  >
+                </UButtonGroup>
+              </div>
+            </div>
+          </UCard>
+        </UModal>
         <UButtonGroup size="sm" orientation="horizontal" class="w-full">
-          <UInput type="file" @change="handleFileChange" class="transition-all ease-in-out duration-500" />
-          <UButton @click="handleSendFile" icon="i-solar-paperclip-bold-duotone" color="primary" variant="solid">Send
-            File</UButton>
-        </UButtonGroup>
-        <UButtonGroup size="sm" orientation="horizontal" class="w-full">
-          <UButton icon="i-solar-paperclip-bold-duotone" color="primary" variant="solid"
-            @click="showInputFile = !showInputFile" />
-
-          <UInput color="primary" variant="outline" type="text" v-model="messageToSend" class="flex-grow w-full"
-            placeholder="Type a message..." />
-          <UButton @click="sendMessage" icon="i-line-md-telegram" color="primary" variant="solid">
+          <UButton
+            icon="i-solar-paperclip-bold-duotone"
+            color="primary"
+            variant="solid"
+            @click="showFileTransfer = !showFileTransfer"
+          />
+          <UInput
+            color="primary"
+            variant="outline"
+            type="text"
+            v-model="messageToSend"
+            class="flex-grow w-full"
+            placeholder="Type a message..."
+          />
+          <UButton
+            @click="sendMessage"
+            icon="i-line-md-telegram"
+            color="primary"
+            variant="solid"
+          >
           </UButton>
         </UButtonGroup>
       </div>
     </div>
     <UModal v-model="isOpen" fullscreen>
-      <UCard class="h-full" :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+      <UCard
+        class="h-full"
+        :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }"
+      >
         <template #header>
           <div class="flex items-center justify-between">
             <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
               Qr Scanner
             </h3>
-            <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="stopScan" />
+            <UButton
+              color="gray"
+              variant="ghost"
+              icon="i-heroicons-x-mark-20-solid"
+              class="-my-1"
+              @click="stopScan"
+            />
           </div>
         </template>
-        <UButton icon="i-solar-qr-code-bold-duotone" color="primary" variant="solid" @click="scan" label="Scan" />
+        <UButton
+          icon="i-solar-qr-code-bold-duotone"
+          color="primary"
+          variant="solid"
+          @click="scan"
+          label="Scan"
+        />
         <video ref="videoElement" class="w-full rounded-lg" v-show="qrscannerEl"></video>
       </UCard>
     </UModal>
@@ -99,24 +188,42 @@ let qrScanner;
 const qrscannerEl = ref(false);
 const isOpen = ref(false);
 
-const showInputFile = ref(false);
+const showFileTransfer = ref(false);
 const file = ref(null);
 
+const sendingFile = ref(false);
 const handleFileChange = (event) => {
   file.value = event.target.files[0];
   console.log(file.value);
 };
-
 const handleSendFile = async () => {
+  sendingFile.value = true;
   if (!file.value) {
     return;
   }
 
   const reader = new FileReader();
-  reader.readAsDataURL(file.value);
-  reader.onload = () => sendFile(reader.result);
+  reader.readAsArrayBuffer(file.value);
+  reader.onload = () => {
+    const fileData = {
+      name: file.value.name, // Send file name for download
+      type: file.value.type, // Send file type for appropriate handling
+      size: file.value.size, // Send file size for progress tracking
+      chunks: [], // Array to store chunked data
+    };
+
+    const chunkSize = 16 * 1024; // Adjust chunk size as needed
+
+    for (let i = 0; i < reader.result.byteLength; i += chunkSize) {
+      const chunk = reader.result.slice(i, i + chunkSize);
+      fileData.chunks.push(chunk);
+    }
+
+    sendFile(fileData);
+  };
 };
-async function scan () {
+
+async function scan() {
   qrscannerEl.value = true;
   try {
     qrScanner = new QrScanner(
@@ -142,7 +249,7 @@ async function scan () {
     qrscannerEl.value = false;
   }
 }
-function stopScan () {
+function stopScan() {
   if (qrScanner) {
     qrScanner.stop();
   }
@@ -188,17 +295,16 @@ const sendFile = (data) => {
   const conn = myPeer.connect(receiver.value);
   conn.on("open", async () => {
     conn.send(data);
-
     await messages.value.push({
       id: Math.random(),
       sender: "me",
       content: `📎 ${file.value.name} 📎`,
     });
-
+    sendingFile.value = false;
     scrollToBottom();
   });
 };
-function scrollToBottom () {
+function scrollToBottom() {
   chatContainer.value.scroll(0, chatContainer.value.scrollHeight + 50);
 }
 onMounted(() => {
