@@ -223,29 +223,6 @@ const handleSendFile = async () => {
 };
 
 async function scan() {
-  reader.readAsArrayBuffer(file.value);
-  reader.onload = () => {
-    const fileData = {
-      name: file.value.name,
-      type: file.value.type,
-      size: file.value.size,
-      chunks: [],
-    };
-
-    const chunkSize = 15 * 1024 * 1024; // Adjust chunk size as needed
-
-    for (let i = 0; i < reader.result.byteLength; i += chunkSize) {
-      const chunk = reader.result.slice(i, i + chunkSize);
-      fileData.chunks.push(chunk);
-    }
-
-    sendFile(fileData);
-  };
-  /*const reader = new FileReader();
-  reader.readAsDataURL(file.value);
-  reader.onload = () => sendFile(reader.result);*/
-}
-async function scan() {
   qrscannerEl.value = true;
   try {
     qrScanner = new QrScanner(
