@@ -20,36 +20,29 @@ html {
 }
 
 html.light {
-    background: radial-gradient(farthest-corner at 40px 40px, #5fd6d0 2%, #ffffff);
+    background: #ffffff
 }
 
 html.dark {
-    background: radial-gradient(farthest-corner at 40px 40px, #5fd6d0 0%, #000000 100%);
+    background: #1f1f1f
 }
 
 
 
 .blur-blob {
-    background-color: #5fd6d0;
     border-radius: 9999px;
-    filter: blur(64px);
-    height: 12rem;
-    mix-blend-mode: hard-light;
-    opacity: .6;
-    position: absolute;
+    filter: blur(60px);
+    height: 30%;
     transition-duration: 2s;
-    transition-property: top, left, bottom, right, opacity, background;
     transition-timing-function: cubic-bezier(.075, .82, .165, 1);
-    width: 12rem;
+    width: 30%;
     z-index: -10
 }
 
-.dark .blur-blob {
-    opacity: .3
-}
+
 
 .awesome-shadow {
-    box-shadow: inset 0 0 100px 20px rgba(255, 255, 255, 0.8);
+    box-shadow: inset 0 0 100px 20px rgba(255, 255, 255, 0.6);
 }
 
 

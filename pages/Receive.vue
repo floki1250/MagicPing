@@ -4,9 +4,7 @@
       Receiver
       <p>{{ characterName }}</p>
       <img :src="qrcode" alt="QR Code" v-if="qrcode" />
-      <UButton @click="handleFileDownload" v-if="receivedFile"
-        >Download : {{ receivedFile.name }}</UButton
-      >
+      <UButton @click="handleFileDownload" v-if="receivedFile">Download : {{ receivedFile.name }}</UButton>
       <p class="text-gray-500 flex flex-wrap w-40">{{ receivedFile }}</p>
       <hr />
       <p v-if="messageReceived">{{ messageReceived }}</p>
@@ -17,7 +15,7 @@
 
 <script setup>
 import { useQRCode } from "@vueuse/integrations/useQRCode";
-import { download } from "downloadjs";
+
 import { ref, onMounted } from "vue";
 import Peer from "peerjs";
 import { uniqueNamesGenerator, starWars, adjectives } from "unique-names-generator";
@@ -49,7 +47,7 @@ onMounted(() => {
     });
   });
 });
-async function handleFileDownload() {
+async function handleFileDownload () {
   const blob = new Blob(receivedFile.value.chunks, {
     type: receivedFile.value.type,
   });

@@ -1,7 +1,7 @@
 <template>
     <UContainer as="div">
         <header
-            class="dark:bg-black/70  bg-white/50 border border-gray-200 dark:border-gray-500  h-full m-4 rounded-lg backdrop-blur-lg awesome-shadow dark:shadow-lg">
+            class="dark:bg-black/70  bg-white/50 border border-gray-50 dark:border-gray-500  h-full m-4 rounded-lg backdrop-blur-lg awesome-shadow dark:shadow-lg">
             <div class="flex justify-between p-4">
                 <div class="text-3xl font-bold">
                     <NuxtLink to="/">
