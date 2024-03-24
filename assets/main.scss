@@ -20,36 +20,40 @@ html {
 }
 
 html.light {
-    background: #ffffff
+    background: #ffffff;
+
+
+    //  background: linear-gradient(90deg, rgba(197, 255, 243, 0.5) 0%, rgba(255, 246, 210, 0.5) 100%);
+
+
 }
 
 html.dark {
-    background: #1f1f1f
+    background: #000000
 }
 
 
 
 .blur-blob {
-    border-radius: 9999px;
     filter: blur(60px);
-    height: 30%;
     transition-duration: 2s;
     transition-timing-function: cubic-bezier(.075, .82, .165, 1);
-    width: 30%;
-    z-index: -10
+    border-radius: 9999px;
+    z-index: -10;
+
 }
 
 
 
 .awesome-shadow {
-    box-shadow: inset 0 0 100px 20px rgba(255, 255, 255, 0.6);
+    box-shadow: inset 0 0 100px 20px rgba(255, 255, 255, 0.2);
 }
 
 
 
-@media (min-width: 768px) {
+/* @media (min-width: 768px) {
     .blur-blob {
         height: 19rem;
         width: 19rem
     }
-}
+} */
