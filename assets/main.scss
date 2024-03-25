@@ -21,15 +21,16 @@ html {
 
 html.light {
     background: #ffffff;
+    background: radial-gradient(rgb(205, 204, 255), #ffffff);
 
 
-    //  background: linear-gradient(90deg, rgba(197, 255, 243, 0.5) 0%, rgba(255, 246, 210, 0.5) 100%);
 
 
 }
 
 html.dark {
-    background: #000000
+    background: #000000;
+    background: radial-gradient(#2d2d41, #000);
 }
 
 
@@ -51,9 +52,8 @@ html.dark {
 
 
 
-/* @media (min-width: 768px) {
-    .blur-blob {
-        height: 19rem;
-        width: 19rem
+@media (max-width: 1024px) {
+    html.light {
+        background: linear-gradient(180deg, rgba(153, 246, 227, .5) 0%, rgba(205, 204, 255, .5) 50%, rgba(254, 205, 211, .5) 100%);
     }
-} */
+}
