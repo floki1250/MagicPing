@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="dark:bg-black/70 bg-white/50 border border-gray-200 dark:border-gray-500 h-full m-4 rounded-lg backdrop-blur-lg awesome-shadow dark:shadow-lg p-4">
+      class="dark:bg-black/70 bg-white/50 transition-all ease-in-out duration-500 border border-gray-100 dark:border-gray-900 hover:dark:border-gray-600 hover:border-gray-300 h-full m-4 rounded-lg backdrop-blur-lg awesome-shadow dark:shadow-lg p-4">
       <UBreadcrumb :links="[
         {
           label: 'Home',
@@ -12,7 +12,9 @@
           label: 'Send',
           icon: 'i-line-md-telegram',
         },
-      ]" />
+      ]"> <template #divider>
+          <span class="w-8 h-1 rounded-full bg-gray-100 dark:bg-gray-700" />
+        </template></UBreadcrumb>
       <br />
 
       <h1 class="text-3xl text-bold reem-kufi dark:text-white text-black/70">Sender</h1>
@@ -22,14 +24,15 @@
       <UDivider class="my-4" />
       <div class="flex justify-between">
         <UButtonGroup size="sm" orientation="horizontal" class="pr-2">
-          <UInput color="primary" variant="outline" type="text" v-model="receiver" placeholder="Enter receiver" />
-          <UButton icon="i-solar-qr-code-bold-duotone" color="primary" variant="solid" @click="isOpen = true" />
+          <UInput color="white" variant="outline" type="text" v-model="receiver" placeholder="Enter receiver" />
+          <UButton icon="i-solar-qr-code-bold-duotone" color="primary" variant="soft" @click="isOpen = true" />
         </UButtonGroup>
-        <UButton @click="connect" variant="solid" icon="i-solar-link-line-duotone" :loading="loading">Connect</UButton>
+        <UButton @click="connect" variant="soft" icon="i-solar-link-line-duotone" :loading="loading">
+          Connect</UButton>
       </div>
     </div>
-    <div v-show="connected"
-      class="dark:bg-black/70 bg-white/50 border border-gray-200 dark:border-gray-500 h-full m-4 rounded-lg backdrop-blur-lg awesome-shadow dark:shadow-lg p-4">
+    <div v-show="true"
+      class="dark:bg-black/70 bg-white/50 transition-all ease-in-out duration-500 border border-gray-100 dark:border-gray-900 hover:dark:border-gray-600 hover:border-gray-300 h-full m-4 rounded-lg backdrop-blur-lg awesome-shadow dark:shadow-lg p-4">
       <div ref="chatContainer" class="flex flex-col h-40 overflow-y-scroll p-4">
         <div v-for="message in messages" :key="message.id" class="m-1">
           <div v-if="message.sender === 'me'" class="flex justify-end">
@@ -38,7 +41,7 @@
             </div>
           </div>
           <div v-else class="flex justify-start">
-            <div class="bg-gray-300 text-black px-4 py-2 rounded-full rounded-bl-none">
+            <div class="bg-rose-400 text-white px-4 py-2 rounded-full rounded-bl-none">
               {{ message.content }}
             </div>
           </div>
@@ -70,11 +73,11 @@
           </UCard>
         </UModal>
         <UButtonGroup size="sm" orientation="horizontal" class="w-full">
-          <UButton icon="i-solar-paperclip-bold-duotone" color="primary" variant="solid"
+          <UButton icon="i-solar-paperclip-bold-duotone" color="primary" variant="soft"
             @click="showFileTransfer = !showFileTransfer" />
-          <UInput color="primary" variant="outline" type="text" v-model="messageToSend" class="flex-grow w-full"
+          <UInput color="white" variant="outline" type="text" v-model="messageToSend" class="flex-grow w-full"
             placeholder="Type a message..." />
-          <UButton @click="sendMessage" icon="i-line-md-telegram" color="primary" variant="solid">
+          <UButton @click="sendMessage" icon="i-line-md-telegram" color="primary" variant="soft">
           </UButton>
         </UButtonGroup>
       </div>
@@ -117,7 +120,7 @@ const myPeer = new Peer(characterName, {});
 let qrScanner;
 const qrscannerEl = ref(false);
 const isOpen = ref(false);
-
+const chunkSize = 16 * 1024;
 const showFileTransfer = ref(false);
 const file = ref(null);
 
@@ -141,7 +144,7 @@ const handleSendFile = async () => {
       chunks: [], // Array to store chunked data
     };
 
-    const chunkSize = 16 * 1024; // Adjust chunk size as needed
+
 
     for (let i = 0; i < reader.result.byteLength; i += chunkSize) {
       const chunk = reader.result.slice(i, i + chunkSize);
@@ -217,8 +220,7 @@ const connect = () => {
 const sendMessage = () => {
   const conn = myPeer.connect(receiver.value);
   conn.on("open", async () => {
-    conn.send(messageToSend.value);
-
+    conn.send({ dt: { id: characterName, message: messageToSend.value } });
     await messages.value.push({
       id: Math.random(),
       sender: "me",
@@ -232,7 +234,7 @@ const sendFile = (data) => {
   console.log("Sending file", data);
   const conn = myPeer.connect(receiver.value);
   conn.on("open", async () => {
-    conn.send(data);
+    conn.send({ dt: { id: characterName, message: data } });
     await messages.value.push({
       id: Math.random(),
       sender: "me",
@@ -247,21 +249,20 @@ function scrollToBottom () {
 }
 onMounted(() => {
   myPeer.on("connection", (conn) => {
-    conn.on("data", (data) => {
-      if (typeof data === "string") {
-        conn.on("data", (data) => {
-          messages.value.push({ id: Math.random(), sender: "other", content: data });
-        });
+    conn.on("data", async (data) => {
+      console.log("Received data", typeof data.dt.message, data);
+      receiver.value = data.dt.id;
+      if (typeof data.dt.message === "string") {
+        await messages.value.push({ id: Math.random(), sender: "other", content: data.dt.message });
       } else {
-        receivedFile.value = data;
-        messages.value.push({ id: Math.random(), sender: "other", content: data });
-      }
-
-      if (
-        receivedFile.value.chunks.length ===
-        Math.ceil(receivedFile.value.size / chunkSize)
-      ) {
-        handleFileDownload();
+        receivedFile.value = data.dt.message;
+        await messages.value.push({ id: Math.random(), sender: "other", content: data.dt.message.name });
+        if (
+          receivedFile.value.chunks.length ===
+          Math.ceil(receivedFile.value.size / chunkSize)
+        ) {
+          handleFileDownload();
+        }
       }
     });
   });

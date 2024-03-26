@@ -34,13 +34,13 @@
 
         <div>
             <NuxtLink to="https://github.com/floki1250" target="_blank">
-                <UIcon name="i-line-md-github-loop" class="w-6 h-6 m-2" />
+                <UIcon name="i-line-md-github-loop" class="w-5 h-5 m-2" />
             </NuxtLink>
             <NuxtLink to="https://twitter.com/Adem1250_Dr" target="_blank">
-                <UIcon name="i-line-md-twitter-x" class="w-6 h-6 m-2" />
+                <UIcon name="i-line-md-twitter-x" class="w-5 h-5 m-2" />
             </NuxtLink>
             <NuxtLink to="https://adamdar.vercel.app/" target="_blank">
-                <UIcon name="i-line-md-star-alt-twotone" class="w-6 h-6 m-2" />
+                <UIcon name="i-solar-star-linear" class="w-5 h-5 m-2" />
             </NuxtLink>
         </div>
     </footer>

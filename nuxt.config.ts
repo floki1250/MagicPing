@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   app: {
     head: {
-      title: "MagicPing",
+      title: "ＭａｇｉｃＰｉｎｇ",
     },
   },
   devtools: {
