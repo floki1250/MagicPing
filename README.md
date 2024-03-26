@@ -1,6 +1,14 @@
-# Nuxt UI Minimal Starter
+# MagicPing 🪄
+![image](https://github.com/floki1250/MagicPing/assets/37814393/2daed488-901e-47bf-a820-1853c1ccf97c)
 
-Look at [Nuxt docs](https://nuxt.com/docs/getting-started/introduction) and [Nuxt UI docs](https://ui.nuxt.com) to learn more.
+MagicPing is a Airdrop Alternative that empowers mobile and desktop devices to transfer messages or files directly between devices through close-range communication in a privacy-preserving manner. In addition to its local peer-to-peer capabilities, MagicPing also offers a cloud solution for broader accessibility and scalability. Unlike conventional methods that rely solely on centralized cloud services, WebRTC-based solutions, or email services which transfer data over the internet, MagicPing provides both decentralized and cloud-based approaches for seamless data transfer.
+
+## Features
+- Close-Range Communication: Utilizes local peer-to-peer communication for direct data transfer between nearby devices.
+- Privacy-Preserving: Ensures privacy by avoiding data transfer over the internet or centralized servers.
+- Message and File Transfer: Supports both messaging and file transfer functionalities.
+- Cross-Platform Compatibility: Compatible with both mobile and desktop devices.
+- Cloud Solution: Offers a cloud-based solution for broader accessibility and scalability.
 
 ## Setup
 
