@@ -31,9 +31,13 @@
           Connect</UButton>
       </div>
     </div>
-    <div v-show="true"
+    <div
       class="dark:bg-black/70 bg-white/50 transition-all ease-in-out duration-500 border border-gray-100 dark:border-gray-900 hover:dark:border-gray-600 hover:border-gray-300 h-full m-4 rounded-lg backdrop-blur-lg awesome-shadow dark:shadow-lg p-4">
-      <div ref="chatContainer" class="flex flex-col h-40 overflow-y-scroll p-4">
+      <div ref="chatContainer" class="flex flex-col min-h-80 overflow-y-scroll p-4">
+        <div class="text-center h-60 flex justify-center  items-center" v-if="messages.length === 0">
+          <UIcon name="i-line-md-chat" class="w-24 h-24 opacity-5"></UIcon>
+        </div>
+
         <div v-for="message in messages" :key="message.id" class="m-1">
           <div v-if="message.sender === 'me'" class="flex justify-end">
             <div class="bg-teal-400 text-white px-4 py-2 rounded-full rounded-br-none">
@@ -104,6 +108,7 @@ import QrScanner from "qr-scanner";
 import { ref } from "vue";
 import Peer from "peerjs";
 import { uniqueNamesGenerator, starWars, adjectives } from "unique-names-generator";
+import { useIntervalFn } from '@vueuse/core'
 const toast = useToast();
 const loading = ref(false);
 const videoElement = ref(null);
@@ -181,10 +186,12 @@ async function scan () {
   }
 }
 function stopScan () {
-  if (qrScanner) {
-    qrScanner.stop();
-  }
-  isOpen.value = false;
+  useIntervalFn(() => {
+    if (qrScanner) {
+      qrScanner.stop();
+    }
+    isOpen.value = false;
+  })
 }
 
 const connect = () => {

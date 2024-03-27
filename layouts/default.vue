@@ -15,7 +15,9 @@
             <div class="flex justify-between p-4">
                 <div class="text-3xl font-bold">
                     <NuxtLink to="/">
-                        <h1 class="righteous dark:text-white text-black/70 ml-2 mt-1">MagicPing</h1>
+                        <h1 class="righteous dark:text-white text-black/70 ml-2 mt-1">
+                            <UChip text="beta" size="2xl">MagicPing</UChip>
+                        </h1>
                     </NuxtLink>
 
                 </div>
@@ -30,17 +32,17 @@
 
 
     </UContainer>
-    <footer class="fixed bottom-0 w-full ">
-
-        <div>
+    <footer
+        class="fixed bottom-0 w-fit  m-1 z-10 dark:bg-black/70  bg-white/50 border border-gray-100 dark:border-gray-900 hover:dark:border-gray-600 hover:border-gray-300 transition ease-in-out duration-500 rounded-full flex justify-center content-center p-1">
+        <div class=" w-full h-full pt-1">
             <NuxtLink to="https://github.com/floki1250" target="_blank">
-                <UIcon name="i-line-md-github-loop" class="w-5 h-5 m-2" />
+                <UIcon name="i-line-md-github-loop" class="w-5 h-5 m-1" />
             </NuxtLink>
             <NuxtLink to="https://twitter.com/Adem1250_Dr" target="_blank">
-                <UIcon name="i-line-md-twitter-x" class="w-5 h-5 m-2" />
+                <UIcon name="i-line-md-twitter-x-alt" class="w-5 h-5 m-1" />
             </NuxtLink>
             <NuxtLink to="https://adamdar.vercel.app/" target="_blank">
-                <UIcon name="i-solar-star-linear" class="w-5 h-5 m-2" />
+                <UIcon name="i-line-md-star" class="w-5 h-5 m-1" />
             </NuxtLink>
         </div>
     </footer>

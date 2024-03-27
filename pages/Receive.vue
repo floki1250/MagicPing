@@ -30,9 +30,12 @@
         </div>
       </div>
     </div>
-    <div v-show="true"
+    <div
       class="dark:bg-black/70 bg-white/50 transition-all ease-in-out duration-500 border border-gray-100 dark:border-gray-900 hover:dark:border-gray-600 hover:border-gray-300 h-full m-4 rounded-lg backdrop-blur-lg awesome-shadow dark:shadow-lg p-4">
-      <div ref="chatContainer" class="flex flex-col h-40 overflow-y-scroll p-4">
+      <div ref="chatContainer" class="flex flex-col min-h-80 overflow-y-scroll p-4">
+        <div class="text-center h-60 flex justify-center  items-center" v-if="messages.length === 0">
+          <UIcon name="i-line-md-chat" class="w-24 h-24 opacity-5"></UIcon>
+        </div>
         <div v-for="  message   in   messages  " :key="message.id" class="m-1">
           <div v-if="message.sender === 'me'" class="flex justify-end">
             <div class="bg-teal-400 text-white px-4 py-2 rounded-full rounded-br-none">
@@ -90,7 +93,7 @@ import { useQRCode } from "@vueuse/integrations/useQRCode";
 import { ref } from "vue";
 import Peer from "peerjs";
 import { uniqueNamesGenerator, starWars, adjectives } from "unique-names-generator";
-const colorMode = useColorMode();
+const toast = useToast();
 const chatContainer = ref(null);
 const characterName = uniqueNamesGenerator({
   dictionaries: [adjectives, starWars],
@@ -190,15 +193,26 @@ onMounted(() => {
   scrollToBottom();
 });
 async function handleFileDownload () {
-  const blob = new Blob(receivedFile.value.chunks, {
-    type: receivedFile.value.type,
-  });
+  try {
+    const blob = new Blob(receivedFile.value.chunks, {
+      type: receivedFile.value.type,
+    });
 
-  const url = window.URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = receivedFile.value.name;
-  link.click();
-  window.URL.revokeObjectURL(url); // Clean up memory leak
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = receivedFile.value.name;
+    link.click();
+    window.URL.revokeObjectURL(url); // Clean up memory leak
+  } catch (error) {
+    toast.add({
+      id: "error",
+      title: "Error",
+      description: "Error: " + error?.message,
+      icon: "i-heroicons-exclamation-circle",
+      timeout: 6000,
+      color: "rose",
+    });
+  }
 }
 </script>
