@@ -19,7 +19,7 @@
               <span class="w-8 h-1 rounded-full bg-gray-100 dark:bg-gray-700" />
             </template></UBreadcrumb>
           <br />
-          <h1 class="text-3xl text-bold reem-kufi dark:text-white text-black/70">sender</h1>
+          <h1 class="text-3xl text-bold reem-kufi dark:text-white text-black/70">Receiver</h1>
           <p class="reem-kufi text-gray-500">I'm {{ characterName }}</p>
           <UDivider class="my-4" />
           <UInput color="white" variant="outline" type="text" v-model="sender" placeholder="Sender" />

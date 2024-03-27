@@ -14,4 +14,9 @@ export default defineNuxtConfig({
   css: ["@/assets/main.scss"],
   ssr: false,
   modules: ["@nuxt/ui", "@nuxtjs/color-mode", "@vueuse/nuxt"],
+  colorMode: {
+    preference: "system", // default value of $colorMode.preference
+    fallback: "light", // fallback value if not system preference found
+    classSuffix: "",
+  },
 });

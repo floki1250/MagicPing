@@ -49,6 +49,6 @@
 <script setup>
 const colorMode = useColorMode();
 function switchColorMode () {
-    colorMode.value = colorMode.value === "dark" ? "light" : "dark";
+    colorMode.preference = colorMode.preference === "dark" ? "light" : "dark";
 }
 </script>
