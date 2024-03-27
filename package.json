@@ -20,16 +20,12 @@
     "@iconify-json/solar": "^1.1.9",
     "@nuxtjs/color-mode": "^3.3.2",
     "@vueuse/nuxt": "^10.9.0",
-    "downloadjs": "^1.4.7",
     "peer": "^1.0.2",
     "peerjs": "^1.5.2",
-    "peerjs-server": "^0.2.9",
     "qr-scanner": "^1.4.2",
     "qrcode": "^1",
-    "randombytes": "^2.1.0",
     "simple-peer": "^9.11.1",
     "unique-names-generator": "^4.7.1",
-    "vue-webrtc": "^3.0.1",
     "webrtc": "^1.14.1"
   }
 }

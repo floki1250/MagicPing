@@ -30,7 +30,7 @@
 
 
     </UContainer>
-    <footer class="absolute bottom-0 ">
+    <footer class="fixed bottom-0 w-full ">
 
         <div>
             <NuxtLink to="https://github.com/floki1250" target="_blank">
