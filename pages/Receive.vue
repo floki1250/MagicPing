@@ -4,7 +4,7 @@
       class="dark:bg-black/70 bg-white/50 transition-all ease-in-out duration-500 border border-gray-100 dark:border-gray-900 hover:dark:border-gray-600 hover:border-gray-300 h-full m-4 rounded-lg backdrop-blur-lg awesome-shadow dark:shadow-lg p-4">
 
       <div class="flex justify-between">
-        <div>
+        <div class="mr-5">
           <UBreadcrumb :links="[
             {
               label: 'Home',
@@ -22,7 +22,7 @@
           <h1 class="text-3xl text-bold reem-kufi dark:text-white text-black/70">Receiver</h1>
           <p class="reem-kufi text-gray-500">I'm {{ characterName }}</p>
           <UDivider class="my-4" />
-          <UInput color="white" variant="outline" type="text" v-model="sender" placeholder="Sender" />
+          <UInput color="white" variant="outline" type="text" v-model="sender" placeholder="Sender" :readonly="true" />
         </div>
         <div>
           <img :src="qrcode" alt="QR Code" v-if="qrcode"
@@ -67,8 +67,8 @@
                 <UButtonGroup size="sm" orientation="horizontal" class="w-full p-2">
                   <UButton @click="handleSendFile" icon="i-solar-paperclip-bold-duotone" color="primary" variant="solid"
                     :loading="sendingFile">Send File via P2P</UButton>
-                  <UButton @click="handleSendFile" icon="i-solar-cloud-bold-duotone" color="violet" variant="solid"
-                    :loading="sendingFile">Send File Via Cloud</UButton>
+                  <UButton icon="i-solar-cloud-bold-duotone" color="violet" variant="solid" disabled>Send File Via Cloud
+                  </UButton>
                 </UButtonGroup>
               </div>
             </div>
@@ -135,12 +135,6 @@ const handleSendFile = async () => {
     sendFile(fileData);
   };
 };
-
-
-
-
-
-
 const sendMessage = () => {
   const conn = myPeer.connect(sender.value);
   conn.on("open", async () => {
