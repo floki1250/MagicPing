@@ -36,6 +36,7 @@
         <div class="text-center h-60 flex justify-center  items-center" v-if="messages.length === 0">
           <UIcon name="i-line-md-chat" class="w-24 h-24 opacity-5"></UIcon>
         </div>
+
         <div v-for="  message   in   messages  " :key="message.id" class="m-1">
           <div v-if="message.sender === 'me'" class="flex justify-end">
             <div class="bg-teal-400 text-white px-4 py-2 rounded-full rounded-br-none">
@@ -48,6 +49,7 @@
             </div>
           </div>
         </div>
+
       </div>
       <div class="flex">
         <UModal v-model="showFileTransfer">
@@ -114,6 +116,7 @@ const handleFileChange = (event) => {
   file.value = event.target.files[0];
 
 };
+const loading = ref(false);
 const handleSendFile = async () => {
   sendingFile.value = true;
   if (!file.value) {
@@ -166,24 +169,29 @@ function scrollToBottom () {
   chatContainer.value.scroll(0, chatContainer.value.scrollHeight + 50);
 }
 onMounted(() => {
-  myPeer.on("connection", (conn) => {
-    conn.on("data", async (data) => {
-      console.log("Received data", typeof data.dt.message, data);
-      sender.value = data.dt.id;
-      if (typeof data.dt.message === "string") {
-        await messages.value.push({ id: Math.random(), sender: "other", content: data.dt.message });
-      } else {
-        receivedFile.value = data.dt.message;
-        await messages.value.push({ id: Math.random(), sender: "other", content: data.dt.message.name });
-        if (
-          receivedFile.value.chunks.length ===
-          Math.ceil(receivedFile.value.size / chunkSize)
-        ) {
-          handleFileDownload();
+  try {
+    myPeer.on("connection", (conn) => {
+      conn.on("data", async (data) => {
+        loading.value = true;
+        sender.value = data.dt.id;
+        if (typeof data.dt.message === "string") {
+          await messages.value.push({ id: Math.random(), sender: "other", content: data.dt.message });
+        } else {
+
+          receivedFile.value = data.dt.message;
+          await messages.value.push({ id: Math.random(), sender: "other", content: data.dt.message.name });
+          if (
+            receivedFile.value.chunks.length ===
+            Math.ceil(receivedFile.value.size / chunkSize)
+          ) {
+            handleFileDownload();
+          }
         }
-      }
+      });
     });
-  });
+  } finally {
+    loading.value = false
+  }
   scrollToBottom();
 });
 async function handleFileDownload () {
