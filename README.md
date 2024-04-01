@@ -1,6 +1,6 @@
 # MagicPing 🪄
 ![clean-browser-mockup](https://github.com/floki1250/MagicPing/assets/37814393/c60ca830-1091-403c-82db-ea534f9994a4)
-![Screenshot_1-4-2024_115853_magicping vercel app](https://github.com/floki1250/MagicPing/assets/37814393/11f4c81c-1df9-4a5c-87fb-6b2ea9551534)
+
 
 
 MagicPing is a Airdrop Alternative that empowers mobile and desktop devices to transfer messages or files directly between devices through close-range communication in a privacy-preserving manner. In addition to its local peer-to-peer capabilities, MagicPing also offers a cloud solution for broader accessibility and scalability. Unlike conventional methods that rely solely on centralized cloud services, WebRTC-based solutions, or email services which transfer data over the internet, MagicPing provides both decentralized and cloud-based approaches for seamless data transfer.
