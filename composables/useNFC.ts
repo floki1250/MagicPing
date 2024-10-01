@@ -1,11 +1,12 @@
-// composables/useNFC.js
 import { ref, onMounted, onUnmounted } from "vue";
 
 export function useNFC() {
   const nfcMessage = ref(null);
   const errorMessage = ref(null);
+  const writeStatus = ref(null);
   let nfcReader = null;
 
+  // Function to read NFC messages
   const readNFC = async () => {
     try {
       nfcReader = new window.NDEFReader();
@@ -31,6 +32,17 @@ export function useNFC() {
     }
   };
 
+  // Function to write NFC messages
+  const writeNFC = async (message) => {
+    try {
+      const nfcWriter = new window.NDEFWriter();
+      await nfcWriter.write(message);
+      writeStatus.value = "Message written successfully!";
+    } catch (error) {
+      errorMessage.value = "Failed to write NFC data.";
+    }
+  };
+
   const stopNFC = () => {
     if (nfcReader) {
       nfcReader = null;
@@ -48,7 +60,9 @@ export function useNFC() {
   return {
     nfcMessage,
     errorMessage,
+    writeStatus,
     readNFC,
+    writeNFC,
     stopNFC,
   };
 }

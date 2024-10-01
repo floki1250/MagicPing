@@ -6,17 +6,22 @@
         <div v-if="errorMessage">
             Error: {{ errorMessage }}
         </div>
-        <button @click="readNFC">Read NFC</button>
-        <button @click="stopNFC">Stop NFC</button>
+        <div v-if="writeStatus">
+            {{ writeStatus }}
+        </div>
+
+        <UInput v-model="messageToWrite" placeholder="Enter message to write" />
+
+        <UButton @click="writeNFC(messageToWrite)">Write NFC</UButton>
+        <UButton @click="readNFC">Read NFC</UButton>
+        <UButton @click="stopNFC">Stop NFC</UButton>
     </div>
 </template>
+
 <script setup>
+import { ref } from 'vue'
 import { useNFC } from '~/composables/useNFC'
 
-const { nfcMessage, errorMessage, readNFC, stopNFC } = useNFC()
-const isNfcSupported = 'NDEFReader' in window
-
-if (!isNfcSupported) {
-    errorMessage.value = 'Web NFC is not supported by this browser.'
-}
+const { nfcMessage, errorMessage, writeStatus, readNFC, writeNFC, stopNFC } = useNFC()
+const messageToWrite = ref('')
 </script>
