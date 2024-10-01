@@ -11,10 +11,12 @@
         </div>
 
         <UInput v-model="messageToWrite" placeholder="Enter message to write" />
+        <div class="grid grid-cols-3 gap-2">
+            <UButton @click="writeNFC(messageToWrite)">Write NFC</UButton>
+            <UButton @click="readNFC">Read NFC</UButton>
+            <UButton @click="stopNFC">Stop NFC</UButton>
+        </div>
 
-        <UButton @click="writeNFC(messageToWrite)">Write NFC</UButton>
-        <UButton @click="readNFC">Read NFC</UButton>
-        <UButton @click="stopNFC">Stop NFC</UButton>
     </div>
 </template>
 

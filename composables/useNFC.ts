@@ -27,8 +27,7 @@ export function useNFC() {
         errorMessage.value = "Failed to read NFC data.";
       };
     } catch (error) {
-      errorMessage.value =
-        "NFC reading is not supported or failed to initialize.";
+      errorMessage.value = error;
     }
   };
 
@@ -39,7 +38,7 @@ export function useNFC() {
       await nfcWriter.write(message);
       writeStatus.value = "Message written successfully!";
     } catch (error) {
-      errorMessage.value = "Failed to write NFC data.";
+      errorMessage.value = error;
     }
   };
 
