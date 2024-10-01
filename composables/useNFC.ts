@@ -34,7 +34,7 @@ export function useNFC() {
   // Function to write NFC messages
   const writeNFC = async (message) => {
     try {
-      const nfcWriter = new window.NDEFWriter();
+      const nfcWriter = new window.NDEFReader();
       await nfcWriter.write(message);
       writeStatus.value = "Message written successfully!";
     } catch (error) {
