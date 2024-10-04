@@ -23,12 +23,12 @@ jobs:
 
       # Step 3: Install dependencies for Nuxt 3 project
       - name: Install dependencies
-        run: npm install
+        run: npm ci
         working-directory: .  # Root directory
 
       # Step 4: Build the Nuxt 3 app
       - name: Build Nuxt 3 app
-        run: npm run build
+        run: npm run generate
         working-directory: .  # Root directory
 
       # Step 5: Copy Nuxt build output to Cordova 'www' folder
