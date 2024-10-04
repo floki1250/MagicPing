@@ -65,7 +65,7 @@ jobs:
 
       # Step 10: Upload the APK as an artifact
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: app-release.apk
           path: mobile/platforms/android/app/build/outputs/apk/debug/app-debug.apk  # Adjust if using release build
