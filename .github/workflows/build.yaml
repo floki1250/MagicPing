@@ -43,7 +43,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '11'  # You may need to adjust the version for Cordova compatibility
-
+          distribution: 'adopt'
       # Step 7: Set up Android SDK (using android-actions/setup-android)
       - name: Install Android SDK
         uses: android-actions/setup-android@v2
