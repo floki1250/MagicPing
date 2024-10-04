@@ -1,0 +1,65 @@
+name: Build Nuxt and Cordova
+
+on:
+  push:
+    branches:
+      - main # Adjust to your main branch
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18" # Adjust to your Node.js version
+
+      # Step 3: Install dependencies for Nuxt 3 project
+      - name: Install dependencies
+        run: npm install
+        working-directory: . # Root directory
+
+      # Step 4: Build the Nuxt 3 app
+      - name: Build Nuxt 3 app
+        run: npm run build
+        working-directory: . # Root directory
+
+      # Step 5: Copy Nuxt build output to Cordova 'www' folder
+      - name: Copy Nuxt build to Cordova www
+        run: |
+          rm -rf mobile/www/*
+          cp -r dist/* mobile/www/
+        working-directory: .
+
+      # Step 6: Set up Java (required for Cordova)
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: "11" # You may need to adjust the version for Cordova compatibility
+
+      # Step 7: Set up Android SDK (required for Cordova)
+      - name: Install Android SDK
+        uses: malinskiy/action-android@v2
+        with:
+          api-level: 30 # Adjust to your preferred Android API level
+          target: default
+          arch: x86_64
+          ndk: "21.4.7075529" # Adjust NDK version if needed
+
+      # Step 8: Install Cordova
+      - name: Install Cordova
+        run: npm install -g cordova
+
+      # Step 9: Build the Cordova Android app
+      - name: Build Cordova Android app
+        run: |
+          cordova platform add android
+          cordova build android
+        working-directory: mobile

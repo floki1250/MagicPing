@@ -5,7 +5,8 @@
 .nitro
 .cache
 dist
-
+mobile/www
+mobile/platforms
 # Node dependencies
 node_modules
 

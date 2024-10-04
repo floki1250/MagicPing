@@ -4,6 +4,7 @@ export default defineNuxtConfig({
     head: {
       title: "MagicPing V2.0",
     },
+    buildAssetsDir: "/web/",
   },
   devtools: {
     enabled: false,
