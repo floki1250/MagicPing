@@ -3,7 +3,7 @@ name: Build Nuxt and Cordova
 on:
   push:
     branches:
-      - main # Adjust to your main branch
+      - beta # Adjust to your main branch
   pull_request:
 
 jobs:
