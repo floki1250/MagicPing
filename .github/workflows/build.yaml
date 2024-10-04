@@ -42,8 +42,9 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v3
         with:
-          java-version: '17'  # You may need to adjust the version for Cordova compatibility
+          java-version: '17'  # Adjust this to your required Java version
           distribution: 'adopt'
+
       # Step 7: Set up Android SDK (using android-actions/setup-android)
       - name: Install Android SDK
         uses: android-actions/setup-android@v2
@@ -61,3 +62,10 @@ jobs:
           cordova platform add android
           cordova build android
         working-directory: mobile
+
+      # Step 10: Upload the APK as an artifact
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release.apk
+          path: mobile/platforms/android/app/build/outputs/apk/debug/app-debug.apk  # Adjust if using release build
