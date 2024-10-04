@@ -23,7 +23,7 @@ jobs:
 
       # Step 3: Install dependencies for Nuxt 3 project
       - name: Install dependencies
-        run: npm ci
+        run: npm install
         working-directory: .  # Root directory
 
       # Step 4: Build the Nuxt 3 app
