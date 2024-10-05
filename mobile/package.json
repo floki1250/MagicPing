@@ -14,12 +14,16 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "cordova-android": "^13.0.0",
-    "cordova-browser": "^7.0.0"
+    "cordova-browser": "^7.0.0",
+    "phonegap-nfc": "^1.2.0"
   },
   "cordova": {
     "platforms": [
       "browser",
       "android"
-    ]
+    ],
+    "plugins": {
+      "phonegap-nfc": {}
+    }
   }
 }
