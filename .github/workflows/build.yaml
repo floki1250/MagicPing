@@ -3,7 +3,7 @@ name: Build Nuxt and Cordova
 on:
   push:
     branches:
-      - beta  # Adjust to your main branch
+      - beta # Adjust to your main branch
   pull_request:
 
 jobs:
@@ -19,17 +19,17 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'  # Adjust to your Node.js version
+          node-version: "18" # Adjust to your Node.js version
 
       # Step 3: Install dependencies for Nuxt 3 project
       - name: Install dependencies
         run: npm install
-        working-directory: .  # Root directory
+        working-directory: . # Root directory
 
       # Step 4: Build the Nuxt 3 app
       - name: Build Nuxt 3 app
         run: npm run generate
-        working-directory: .  # Root directory
+        working-directory: . # Root directory
 
       # Step 5: Copy Nuxt build output to Cordova 'www' folder
       - name: Copy Nuxt build to Cordova www
@@ -42,15 +42,15 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v3
         with:
-          java-version: '17'  # Adjust this to your required Java version
-          distribution: 'adopt'
+          java-version: "17" # Adjust this to your required Java version
+          distribution: "adopt"
 
       # Step 7: Set up Android SDK (using android-actions/setup-android)
       - name: Install Android SDK
         uses: android-actions/setup-android@v2
         with:
-          api-level: 30  # Adjust to your preferred Android API level
-          ndk: '21.4.7075529'  # Adjust NDK version if needed
+          api-level: 30 # Adjust to your preferred Android API level
+          ndk: "21.4.7075529" # Adjust NDK version if needed
 
       # Step 8: Install Cordova
       - name: Install Cordova
@@ -68,4 +68,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-release.apk
-          path: mobile/platforms/android/app/build/outputs/apk/debug/app-debug.apk  # Adjust if using release build
+          path: mobile/platforms/android/app/build/outputs/apk/debug/app-debug.apk # Adjust if using release build
