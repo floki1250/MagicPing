@@ -1,5 +1,5 @@
 <template>
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-4 gap-4">
         <UButton @click="shareMessage" icon="i-solar-share-bold-duotone" variant="soft">Share Message</UButton>
         <UButton @click="openSettings" icon="i-solar-settings-bold-duotone" variant="soft">Settings</UButton>
     </div>
@@ -13,22 +13,34 @@ onMounted(() => {
     document.addEventListener("deviceready", onDeviceReady, false);
 });
 
-// Function to handle device ready event
+// Function to handle the device ready event
 function onDeviceReady () {
-    // Enable NFC
+    console.log('Device is ready'); // Log device readiness
+    alert('Device is ready!'); // Confirm the event is firing
+
+    // Check if NFC is enabled
     nfc.enabled(
-        () => alert('NFC enabled'),
-        error => alert(error)
+        () => {
+            alert('NFC is enabled'); // Confirm NFC is enabled
+            console.log('NFC is enabled');
+        },
+        error => {
+            alert('NFC is not enabled: ' + error);
+            console.log('NFC error: ' + error);
+        }
     );
 
     // Add NFC tag reading listener
     nfc.addNdefListener(onNfcMessageRead,
-        () => console.log("Listening for NFC messages"),
-        error => console.log("Error adding NFC listener: " + error)
+        () => {
+            alert("Listening for NFC tags");
+            console.log("Listening for NFC messages");
+        },
+        error => {
+            alert("Error adding NFC listener: " + error);
+            console.log("Error adding NFC listener: " + error);
+        }
     );
-
-    // Vibrate the device to indicate readiness
-    navigator.vibrate(1000);
 }
 
 // Function to read NFC message
@@ -37,10 +49,11 @@ function onNfcMessageRead (nfcEvent) {
     var ndefMessage = tag.ndefMessage;
 
     if (ndefMessage) {
-        // Iterate through the NDEF records
         var payload = nfc.bytesToString(ndefMessage[0].payload);
-        console.log("Read NFC message:", payload);
         alert("NFC message: " + payload);
+        console.log("Read NFC message:", payload);
+    } else {
+        alert("No NDEF message found");
     }
 }
 
@@ -53,13 +66,27 @@ const shareMessage = () => {
 
     nfc.write(
         message,
-        () => console.log('Wrote data to NFC tag'),
-        error => console.log("Write failed: " + error)
+        () => {
+            alert('Successfully wrote to NFC tag');
+            console.log('Wrote data to NFC tag');
+        },
+        error => {
+            alert("Write failed: " + error);
+            console.log("Write failed: " + error);
+        }
     );
 }
 
 // Function to open NFC settings
 const openSettings = () => {
-    nfc.showSettings();
+    nfc.showSettings(
+        () => {
+            alert('NFC settings opened');
+        },
+        error => {
+            alert("Failed to open settings: " + error);
+            console.log("Failed to open settings: " + error);
+        }
+    );
 }
 </script>
