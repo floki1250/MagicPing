@@ -8,19 +8,5 @@
     <content src="index.html" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
-      <platform name="android">
-    <!-- Required NFC permissions -->
-    <uses-permission android:name="android.permission.NFC" />
-    <uses-feature android:name="android.hardware.nfc" android:required="true" />
 
-    <!-- Ensure that the app starts with index.html -->
-    <preference name="AndroidLaunchMode" value="singleTask" />
-
-    <!-- Add other Android-specific configurations here -->
-  </platform>
-
-
-
-  <!-- Plugin definitions -->
-  <plugin name="phonegap-nfc" source="npm" />
 </widget>
