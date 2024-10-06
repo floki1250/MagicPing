@@ -1,60 +1,117 @@
 <template>
     <div>
-        <h1>NFC Example</h1>
-        <button @click="writeNFC">Write NFC Tag</button>
-        <p v-if="nfcMessage">NFC Message: {{ nfcMessage }}</p>
+        <h1>NFC Text Sharing</h1>
+
+        <div>
+            <label for="mimeType">MIME Type:</label>
+            <input type="text" v-model="mimeType" placeholder="text/plain">
+        </div>
+
+        <div>
+            <label for="payload">Payload:</label>
+            <input type="text" v-model="payload" placeholder="Enter text to share">
+        </div>
+
+        <button @click="shareMessage">Share via NFC</button>
+        <button @click="loadSampleData">Load Sample Data</button>
+
+        <div v-if="status" id="status">{{ status }}</div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+// Import necessary libraries for NFC, if available in Cordova environment
+import { ref, onMounted } from 'vue'
 
-// Reactive state to hold NFC message
-const nfcMessage = ref('');
+// State variables
+const mimeType = ref('text/plain')
+const payload = ref('Hello from PhoneGap')
+const status = ref('')
+let sampleDataIndex = 0
 
-// Function to handle NFC reading
-const onNFCRead = (nfcEvent) => {
-    const tag = nfcEvent.tag;
-    nfcMessage.value = tag.ndefMessage
-        ? nfc.bytesToString(tag.ndefMessage[0].payload)
-        : 'No NDEF data';
-};
+// Sample NFC data
+const sampleData = [
+    { mimeType: 'text/pg', payload: 'Hello PhoneGap' },
+    { mimeType: 'game/rockpaperscissors', payload: 'Rock' },
+    {
+        mimeType: 'text/x-vCard',
+        payload: 'BEGIN:VCARD\nVERSION:2.1\nN:Coleman;Don;;;\nFN:Don Coleman\nORG:Chariot Solutions;\nTEL:215-358-1780\nEMAIL:dcoleman@chariotsolutions.com\nEND:VCARD'
+    }
+]
 
-// Function to write to NFC tag
-const writeNFC = () => {
-    const message = [
-        ndef.textRecord('Hello from Nuxt 3 with Cordova!')
-    ];
-
-    nfc.write(message).then(() => {
-        alert('NFC Tag written successfully!');
-    }).catch(err => {
-        console.error('Failed to write NFC tag:', err);
-    });
-};
-
+// Lifecycle hook to wait until device is ready
 onMounted(() => {
-    if (window.cordova) {
-        document.addEventListener('deviceready', () => {
-            console.log('Device is ready, initializing NFC...');
-            // Initialize NFC listener
-            nfc.addNdefListener(onNFCRead, () => {
-                console.log('Listening for NFC Tags...');
-            }, (err) => {
-                console.error('Error adding NFC listener:', err);
-            });
-        }, false);
-    }
-});
+    document.addEventListener('deviceready', () => {
+        console.log('Device is ready!')
+    })
+})
 
-onBeforeUnmount(() => {
-    if (window.cordova) {
-        document.removeEventListener('deviceready', null);
-        nfc.removeNdefListener(onNFCRead, () => {
-            console.log('Stopped NFC listener');
-        }, (err) => {
-            console.error('Error removing NFC listener:', err);
-        });
+// Function to share message via NFC
+const shareMessage = () => {
+    if (!window.nfc || !window.ndef) {
+        alert("NFC or NDEF plugin not found!")
+        return
     }
-});
+
+    const record = window.ndef.mimeMediaRecord(mimeType.value, window.nfc.stringToBytes(payload.value))
+
+    // Share NFC record
+    window.nfc.share(
+        [record],
+        () => {
+            navigator.notification.vibrate(100)  // Vibrate on success
+            setStatus("Message sent successfully!")
+        },
+        (error) => {
+            alert("Failed to share: " + error)
+            setStatus("Error while sharing message")
+        }
+    )
+}
+
+// Function to load sample data into inputs
+const loadSampleData = () => {
+    const sample = sampleData[sampleDataIndex]
+
+    mimeType.value = sample.mimeType
+    payload.value = sample.payload
+
+    sampleDataIndex++
+    if (sampleDataIndex >= sampleData.length) {
+        sampleDataIndex = 0
+    }
+}
+
+// Function to set status message
+const setStatus = (message) => {
+    status.value = message
+    setTimeout(() => { status.value = '' }, 3000)
+}
 </script>
+
+<style scoped>
+h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+input {
+    display: block;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    width: 100%;
+    max-width: 300px;
+}
+
+button {
+    margin: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+#status {
+    margin-top: 1rem;
+    color: green;
+}
+</style>

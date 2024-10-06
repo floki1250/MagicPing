@@ -27,8 +27,12 @@
           <UInput color="white" variant="outline" type="text" v-model="receiver" placeholder="Enter receiver" />
           <UButton icon="i-solar-qr-code-bold-duotone" color="primary" variant="soft" @click="isOpen = true" />
         </UButtonGroup>
-        <UButton @click="connect" variant="soft" icon="i-solar-link-line-duotone" :loading="loading">
-          Connect</UButton>
+        <UButtonGroup size="sm" orientation="horizontal" class="pr-2">
+          <UButton @click="connect" variant="soft" icon="i-solar-link-line-duotone" :loading="loading">
+            Connect</UButton>
+          <UButton @click="writeTextToNFC" color="orange" variant="soft" icon="i-solar-link-line-duotone">
+            TEST</UButton>
+        </UButtonGroup>
       </div>
     </div>
     <div
@@ -128,7 +132,18 @@ const isOpen = ref(false);
 const chunkSize = 16 * 1024;
 const showFileTransfer = ref(false);
 const file = ref(null);
+//----TEST NFC---
+const test = ref('Ready to write!')
+function writeTextToNFC () {
+  var message = [
+    ndef.textRecord("hello, world")
+  ];
 
+  nfc.share(message, [onSuccess], [onFailure]);
+}
+
+
+//----------------
 const sendingFile = ref(false);
 const handleFileChange = (event) => {
   file.value = event.target.files[0];
