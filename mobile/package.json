@@ -13,10 +13,10 @@
   "author": "Apache Cordova Team",
   "license": "Apache-2.0",
   "devDependencies": {
+    "community-cordova-plugin-nfc": "^1.4.0",
     "cordova-android": "^13.0.0",
     "cordova-browser": "^7.0.0",
-    "cordova-plugin-vibration": "^3.1.1",
-    "phonegap-nfc": "^1.2.0"
+    "cordova-plugin-vibration": "^3.1.1"
   },
   "cordova": {
     "platforms": [
@@ -24,8 +24,8 @@
       "android"
     ],
     "plugins": {
-      "phonegap-nfc": {},
-      "cordova-plugin-vibration": {}
+      "cordova-plugin-vibration": {},
+      "community-cordova-plugin-nfc": {}
     }
   }
 }
