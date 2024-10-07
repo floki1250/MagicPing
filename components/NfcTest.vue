@@ -2,106 +2,59 @@
     <div class="grid grid-cols-4 gap-4">
         <UButton @click="shareMessage" icon="i-solar-share-bold-duotone" variant="soft">Share Message</UButton>
         <UButton @click="openSettings" icon="i-solar-settings-bold-duotone" variant="soft">Settings</UButton>
+        <UButton @click="requestPermissions" icon="i-solar-key-bold-duotone" variant="soft">Request Permissions
+        </UButton>
     </div>
 </template>
 
 <script setup>
 import { onMounted } from 'vue'
 
-onMounted(() => {
-    document.addEventListener("deviceready", onDeviceReady, false);
-});
-
-function onDeviceReady () {
+// Trigger permission requests when button is clicked
+const requestPermissions = () => {
     const permissions = cordova.plugins.permissions;
-    console.log(device.cordova);
-    console.log(permissions);
-    // Check if NFC permission is granted
-    permissions.checkPermission(permissions.NFC, status => {
 
-        alert('NFC permission not granted. Requesting permission...');
-        permissions.requestPermission(permissions.NFC, success => {
-            alert('NFC permission granted');
-            enableNFC();
-        }, error => {
-            alert('NFC permission denied');
-        });
+    // Define NFC and VIBRATE permissions
+    const nfcPermission = permissions.NFC;
+    const vibratePermission = permissions.VIBRATE;
 
+    // Check and request NFC permission
+    permissions.checkPermission(nfcPermission, status => {
+        if (!status.hasPermission) {
+            alert('NFC permission not granted. Requesting permission...');
+            permissions.requestPermission(nfcPermission, success => {
+                alert('NFC permission granted');
+            }, error => {
+                alert('NFC permission denied');
+            });
+        } else {
+            alert('NFC permission already granted');
+        }
     }, error => {
-        alert('permission denied');
+        alert('Permission check failed: ' + error);
+    });
+
+    // Check and request VIBRATE permission
+    permissions.checkPermission(vibratePermission, status => {
+        if (!status.hasPermission) {
+            alert('VIBRATE permission not granted. Requesting permission...');
+            permissions.requestPermission(vibratePermission, success => {
+                alert('VIBRATE permission granted');
+            }, error => {
+                alert('VIBRATE permission denied');
+            });
+        } else {
+            alert('VIBRATE permission already granted');
+        }
+    }, error => {
+        alert('Permission check failed: ' + error);
     });
 }
 
-function enableNFC () {
-    // Enable NFC if the permission is granted
-    nfc.enabled(
-        () => {
-            alert('NFC is enabled');
-            console.log('NFC is enabled');
-        },
-        error => {
-            alert('NFC is not enabled: ' + error);
-            console.log('NFC error: ' + error);
-        }
-    );
-
-    // Add the NFC tag reading listener
-    nfc.addNdefListener(onNfcMessageRead,
-        () => {
-            alert("Listening for NFC tags");
-            console.log("Listening for NFC messages");
-        },
-        error => {
-            alert("Error adding NFC listener: " + error);
-            console.log("Error adding NFC listener: " + error);
-        }
-    );
-}
-
-// Function to read NFC message
-function onNfcMessageRead (nfcEvent) {
-    var tag = nfcEvent.tag;
-    var ndefMessage = tag.ndefMessage;
-
-    if (ndefMessage) {
-        var payload = nfc.bytesToString(ndefMessage[0].payload);
-        alert("NFC message: " + payload);
-        console.log("Read NFC message:", payload);
-    } else {
-        alert("No NDEF message found");
-    }
-}
-
-// Function to share a message via NFC
-const shareMessage = () => {
-    var message = [
-        ndef.textRecord("Hello, world"),
-        ndef.uriRecord("http://github.com/chariotsolutions/phonegap-nfc")
-    ];
-
-    nfc.write(
-        message,
-        () => {
-            alert('Successfully wrote to NFC tag');
-            console.log('Wrote data to NFC tag');
-        },
-        error => {
-            alert("Write failed: " + error);
-            console.log("Write failed: " + error);
-        }
-    );
-}
-
-// Function to open NFC settings
-const openSettings = () => {
-    nfc.showSettings(
-        () => {
-            alert('NFC settings opened');
-        },
-        error => {
-            alert("Failed to open settings: " + error);
-            console.log("Failed to open settings: " + error);
-        }
-    );
-}
+// Setup to listen for the Cordova device ready event
+onMounted(() => {
+    document.addEventListener("deviceready", () => {
+        alert('Device is ready');
+    }, false);
+});
 </script>
