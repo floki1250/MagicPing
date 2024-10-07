@@ -1,60 +1,91 @@
 <template>
-    <div class="grid grid-cols-4 gap-4">
+    <div class="grid grid-cols-2 gap-4">
         <UButton @click="shareMessage" icon="i-solar-share-bold-duotone" variant="soft">Share Message</UButton>
         <UButton @click="openSettings" icon="i-solar-settings-bold-duotone" variant="soft">Settings</UButton>
-        <UButton @click="requestPermissions" icon="i-solar-key-bold-duotone" variant="soft">Request Permissions
-        </UButton>
     </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
 
+document.addEventListener('deviceready', function () {
+    var permissions = cordova.plugins.permissions;
+
+    // Define the permissions you want to request (e.g., CAMERA and LOCATION)
+    var requiredPermissions = [
+        permissions.VIBRATE,
+        permissions.NFC
+    ];
+
+    // Function to request permissions
+    function requestPermissions () {
+        permissions.requestPermissions(
+            requiredPermissions,
+            function (status) {
+                if (status.hasPermission) {
+                    console.log("All permissions granted!");
+                    // You can now access the features that require these permissions
+                } else {
+                    console.warn("Some permissions are denied.");
+                    // Handle the case where permissions are denied
+                }
+            },
+            function (error) {
+                console.error("Permission request error:", error);
+            }
+        );
+    }
+
+    // Function to check if permissions are already granted
+    function checkPermissions () {
+        permissions.hasPermission(
+            requiredPermissions[0], // Check one of the permissions
+            function (status) {
+                if (status.hasPermission) {
+                    console.log("Permission already granted.");
+                    // Proceed with functionality that requires the permission
+                } else {
+                    console.log("Permission not granted, requesting...");
+                    requestPermissions();
+                }
+            },
+            function (error) {
+                console.error("Error checking permission:", error);
+            }
+        );
+    }
+
+    function enableNFC () {
+        nfc.enabled(() => {
+            console.log('NFC is enabled')
+        }, error => {
+            console.log('NFC error: ' + error)
+        })
+    }
+
+
+    // Check and request permissions when the app starts
+    checkPermissions();
+    enableNFC();
+}, false);
 // Trigger permission requests when button is clicked
-const requestPermissions = () => {
-    const permissions = cordova.plugins.permissions;
+const shareMessage = () => {
+    const message = [
+        ndef.textRecord("Hello, world"),
+        ndef.uriRecord("http://github.com/chariotsolutions/phonegap-nfc")
+    ]
 
-    // Define NFC and VIBRATE permissions
-    const nfcPermission = permissions.NFC;
-    const vibratePermission = permissions.VIBRATE;
-
-    // Check and request NFC permission
-    permissions.checkPermission(nfcPermission, status => {
-        if (!status.hasPermission) {
-            alert('NFC permission not granted. Requesting permission...');
-            permissions.requestPermission(nfcPermission, success => {
-                alert('NFC permission granted');
-            }, error => {
-                alert('NFC permission denied');
-            });
-        } else {
-            alert('NFC permission already granted');
-        }
+    nfc.write(message, () => {
+        console.log('Successfully wrote to NFC tag')
     }, error => {
-        alert('Permission check failed: ' + error);
-    });
-
-    // Check and request VIBRATE permission
-    permissions.checkPermission(vibratePermission, status => {
-        if (!status.hasPermission) {
-            alert('VIBRATE permission not granted. Requesting permission...');
-            permissions.requestPermission(vibratePermission, success => {
-                alert('VIBRATE permission granted');
-            }, error => {
-                alert('VIBRATE permission denied');
-            });
-        } else {
-            alert('VIBRATE permission already granted');
-        }
-    }, error => {
-        alert('Permission check failed: ' + error);
-    });
+        console.log('Write failed: ' + error)
+    })
 }
 
-// Setup to listen for the Cordova device ready event
-onMounted(() => {
-    document.addEventListener("deviceready", () => {
-        alert('Device is ready');
-    }, false);
-});
+const openSettings = () => {
+    nfc.showSettings(() => {
+        console.log('Opened NFC settings')
+    }, error => {
+        console.log('Failed to open settings: ' + error)
+    })
+}
 </script>
