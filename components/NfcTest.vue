@@ -7,21 +7,34 @@
 
 <script setup>
 import { onMounted } from 'vue'
+const permissions = cordova.plugins.permissions;
 
-// Wait until the device is ready
 onMounted(() => {
     document.addEventListener("deviceready", onDeviceReady, false);
 });
 
-// Function to handle the device ready event
 function onDeviceReady () {
-    console.log('Device is ready'); // Log device readiness
-    alert('Device is ready!'); // Confirm the event is firing
+    // Check if NFC permission is granted
+    permissions.hasPermission(permissions.NFC, status => {
+        if (!status.hasPermission) {
+            alert('NFC permission not granted. Requesting permission...');
+            permissions.requestPermission(permissions.NFC, success => {
+                alert('NFC permission granted');
+                enableNFC();
+            }, error => {
+                alert('NFC permission denied');
+            });
+        } else {
+            enableNFC();
+        }
+    });
+}
 
-    // Check if NFC is enabled
+function enableNFC () {
+    // Enable NFC if the permission is granted
     nfc.enabled(
         () => {
-            alert('NFC is enabled'); // Confirm NFC is enabled
+            alert('NFC is enabled');
             console.log('NFC is enabled');
         },
         error => {
@@ -30,7 +43,7 @@ function onDeviceReady () {
         }
     );
 
-    // Add NFC tag reading listener
+    // Add the NFC tag reading listener
     nfc.addNdefListener(onNfcMessageRead,
         () => {
             alert("Listening for NFC tags");

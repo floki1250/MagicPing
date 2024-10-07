@@ -1,0 +1,1 @@
+import{g as t,c as o,o as a}from"./B1llnzT6.js";const l={__name:"[...catchall]",setup(c){const e=t();return window.location.pathname==="/index.html"&&e.push("/"),(n,r)=>(a(),o("div"))}};export{l as default};

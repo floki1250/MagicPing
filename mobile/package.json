@@ -16,6 +16,7 @@
     "community-cordova-plugin-nfc": "^1.4.0",
     "cordova-android": "^13.0.0",
     "cordova-browser": "^7.0.0",
+    "cordova-plugin-android-permissions": "^1.1.5",
     "cordova-plugin-vibration": "^3.1.1"
   },
   "cordova": {
@@ -25,7 +26,8 @@
     ],
     "plugins": {
       "cordova-plugin-vibration": {},
-      "community-cordova-plugin-nfc": {}
+      "community-cordova-plugin-nfc": {},
+      "cordova-plugin-android-permissions": {}
     }
   }
 }

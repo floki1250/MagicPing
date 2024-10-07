@@ -8,5 +8,10 @@
     <content src="index.html" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
+    <platform name="android">
+        <uses-permission android:name="android.permission.NFC" />
+        <uses-permission android:name="android.permission.VIBRATE" />
+        <uses-feature android:name="android.hardware.nfc" android:required="true" />
+    </platform>
 
 </widget>
