@@ -14,7 +14,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "community-cordova-plugin-nfc": "^1.4.0",
-    "cordova-android": "^13.0.0",
+    "cordova-android": "^11.0.0",
     "cordova-browser": "^7.0.0",
     "cordova-plugin-android-permissions": "^1.1.5",
     "cordova-plugin-device": "^3.0.0",

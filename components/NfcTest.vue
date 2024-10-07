@@ -2,11 +2,22 @@
     <div class="grid grid-cols-2 gap-4">
         <UButton @click="shareMessage" icon="i-solar-share-bold-duotone" variant="soft">Share Message</UButton>
         <UButton @click="openSettings" icon="i-solar-settings-bold-duotone" variant="soft">Settings</UButton>
+        <h1>Status: {{ status }}</h1>
     </div>
 </template>
 
 <script setup>
+import { ref } from 'vue';
 
+const cordova = window.cordova
+const status = ref("")
+if (!cordova) {
+    status.value = 'cordova not available'
+    console.log('cordova not available')
+} else {
+    status.value = 'cordova available'
+    console.log('cordova available')
+}
 document.addEventListener('deviceready', function () {
     var permissions = cordova.plugins.permissions;
 
