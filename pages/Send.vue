@@ -122,10 +122,13 @@ const messageToSend = ref("");
 const receivedFile = ref(null);
 const receiver = ref("");
 const myPeer = new Peer(characterName, {
-  host: 'magicping-server.vercel.app', // Replace with your server's host
-  port: 443, // Replace with your server's port
-  path: '/api/mpserver'
+  host: 'magicping-server.vercel.app', // Your server's host
+  port: 443, // Use 443 for HTTPS (since Vercel only supports HTTPS)
+  path: '/peerjs', // Updated path based on your server config
+  secure: true, // Since you're using HTTPS
+  allow_discovery: true, // This enables peer discovery
 });
+
 let qrScanner;
 const qrscannerEl = ref(false);
 const isOpen = ref(false);
@@ -226,6 +229,7 @@ const connect = () => {
       color: "red",
     });
   });
+  console.error("Connection error:", err);
 };
 
 const sendMessage = () => {
