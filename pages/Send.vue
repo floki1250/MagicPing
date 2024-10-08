@@ -124,7 +124,7 @@ const receiver = ref("");
 const myPeer = new Peer(characterName, {
   host: 'magicping-server.vercel.app', // Your server's host
   port: 443, // Use 443 for HTTPS (since Vercel only supports HTTPS)
-  path: '/peerjs', // Updated path based on your server config
+  path: '/api/mpserver/peerjs', // Updated path based on your server config
   secure: true, // Since you're using HTTPS
   allow_discovery: true, // This enables peer discovery
 });
