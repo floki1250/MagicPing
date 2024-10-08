@@ -124,7 +124,7 @@ const receiver = ref("");
 const myPeer = new Peer(characterName, {
   host: 'magicping-server.vercel.app', // Replace with your server's host
   port: 443, // Replace with your server's port
-  path: '/api/mpserver/peerjs/server'
+  path: '/api/mpserver'
 });
 let qrScanner;
 const qrscannerEl = ref(false);
