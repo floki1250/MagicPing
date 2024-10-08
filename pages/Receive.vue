@@ -37,7 +37,7 @@
           <UIcon name="i-line-md-chat" class="w-24 h-24 opacity-5"></UIcon>
         </div>
 
-        <div v-for="  message   in   messages  " :key="message.id" class="m-1">
+        <div v-for="  message in messages  " :key="message.id" class="m-1">
           <div v-if="message.sender === 'me'" class="flex justify-end">
             <div class="bg-teal-400 text-white px-4 py-2 rounded-full rounded-br-none">
               {{ message.content }}
@@ -105,7 +105,11 @@ const messages = ref([]);
 const messageToSend = ref("");
 const receivedFile = ref(null);
 const sender = ref("");
-const myPeer = new Peer(characterName, {});
+const myPeer = new Peer(characterName, {
+  host: 'magicping-server.vercel.app', // Replace with your server's host
+  port: 443, // Replace with your server's port
+  path: '/api/mpserver/peerjs/server'
+});
 
 const chunkSize = 16 * 1024;
 const showFileTransfer = ref(false);

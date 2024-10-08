@@ -24,8 +24,6 @@
         </NuxtLink>
       </div>
     </div>
-    <!--  <Cloud :characterName="'Data'" /> -->
-    <NfcTest class="w-full" />
   </main>
 </template>
 <script setup>
